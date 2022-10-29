@@ -1,0 +1,36 @@
+#! binbash
+echo configuring container compositions...
+
+# This part should be changed for custom container user
+IMAGE_NAME=<IMAGE_NAME>
+CONTAINER_USER=<USER_NAME>
+
+# if you use any kind of server inside the docker container, map the port number
+CONTAINER_PORT=<PORT>
+
+# if you use gpu, you can set specific gpu number or just say all
+GPU_NUMBER=all
+
+CONTAINER_NAME=<NAME_OF_THE_CONTAINER ex) PROJECT_USER>
+
+# if you wish to limit the memory
+# if you wish to limit memory swap, set container memory
+CONTAINER_MEMORY=100G
+
+echo building container...
+
+# Do not change these variables if unnecessary
+GPU_DEVICE=all
+
+
+# example for usign jupyter server inside docker container
+# Change the last row to bind individual workspace to docker-container
+docker run -it 
+        -p ${CONTAINER_PORT}${CONTAINER_PORT} 
+        --user ${CONTAINER_USER} 
+        --gpus ${GPU_DEVICE} 
+        -m ${CONTAINER_MEMORY} 
+        --memory-swap -1 
+        -v ex_hdd/data:/home/data <-- change binding 
+        --name ${CONTAINER_NAME} ${IMAGE_NAME} 
+        jupyter notebook --port ${CONTAINER_PORT} --ip 0.0.0.0

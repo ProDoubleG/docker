@@ -1,0 +1,30 @@
+# example of a dockerfile using tensorflow image as base image
+FROM tensorflow/tensorflow:2.6.0-gpu
+
+# GID should be registored beforehand
+RUN groupadd -g <GID> <GROUP_NAME>
+
+# add members of the project
+COPY members ./
+RUN cat members >> /etc/passwd
+
+# shared folder will be binded to shared data folder on docker run
+RUN mkdir /home/shared
+
+# change GID of the folder if the folder is only accessable by certain group or individual
+# or you may not be able to edit files inside!
+RUN chgrp -R <GROUP_NAME> home
+RUN chmod -R 770  /home
+
+# apt-get install first
+RUN apt-get update
+RUN apt-get install -y git
+RUN apt-get install -y vim
+RUN apt-get install -y tmux
+
+# packages
+RUN pip install numpy sklearn seaborn scipy matplotlib pandas transforms3d tqdm xgboost shap
+RUN pip install ipykernel
+
+# set initial access directory
+WORKDIR /home
